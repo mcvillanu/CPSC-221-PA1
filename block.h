@@ -9,7 +9,6 @@ using namespace std;
 using namespace cs221util;
 
 class Block {
-
  public:
   /** 
    * Creates a block that is width X img.height pixels in size

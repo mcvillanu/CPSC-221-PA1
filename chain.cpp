@@ -11,7 +11,7 @@
  */
 Chain::~Chain() {
   /* your code here */
-  delete head_;
+  clear();
 }
 
 /**
@@ -29,10 +29,10 @@ Chain::Node * Chain::insertAfter(Node * p, const Block &ndata) {
   /* your code here */
   Node *newNode = new Node(ndata);
   if (p == NULL) {
-    Node *temp = head_;
+    Node *temp = this->head_;
     temp->previous = newNode;
     newNode->next = temp;
-    head_= newNode;
+    this->head_= newNode;
     delete temp;
   } else {
     if (p->next == NULL) {
@@ -58,14 +58,14 @@ Chain::Node * Chain::insertAfter(Node * p, const Block &ndata) {
  * @param second = The node that comes second in the chain.
  */
 void Chain::swapSideBySide(Node *first, Node *second) {
-  if (head_ == first) {
+  if (this->head_ == first) {
     Node * temp = second->next;
     first->next = temp;
     temp->previous = first;
     first->previous = second;
     second->next = first;
     second->previous = NULL;
-    head_ = second;
+    this->head_ = second;
     delete temp;
     return;
   } else if (second->next == NULL) {
@@ -112,15 +112,15 @@ void Chain::swap(Node *p, Node *q) {
   }
   //if there are only 2 blocks in the chain
   if (length_ == 2) {
-    if (head_ == p) {
-      head_ = q;
+    if (this->head_ == p) {
+      this->head_ = q;
       q->previous = NULL;
       q->next = p;
       p->next = NULL;
       p->previous = q;
       return;
     } else {
-      head_ = p;
+      this->head_ = p;
       p->previous = NULL;
       p->next = q;
       q->next = NULL;
@@ -147,7 +147,7 @@ void Chain::swap(Node *p, Node *q) {
     q->previous = NULL;
     q->next = next_p;
     next_p->previous = q; 
-    head_ = q;
+    this->head_ = q;
   } else {
     q->previous = previous_p;
     previous_p->next = q;
@@ -162,7 +162,7 @@ void Chain::swap(Node *p, Node *q) {
     p->previous = NULL;
     p->next = next_q;
     next_q->previous = p;
-    head_ = p;
+    this->head_ = p;
   } else {
     p->previous = previous_q;
     previous_q->next = p;
@@ -184,6 +184,7 @@ void Chain::swap(Node *p, Node *q) {
  */
 void Chain::clear() {
   /* your code here */
+  delete this->head_;
 }
 
 /**
@@ -195,6 +196,22 @@ void Chain::clear() {
  */
 void Chain::copy(Chain const &other) {
   /* your code here */
+  this->length_ = other->length_;
+  Node * curr = other->head_;
+  Node * copy = new Node(curr->data);
+  this->head_ = copy;
+  while (curr != NULL) {
+    if (curr->next != NULL) {
+      copy->next = new Node(curr->next->data);
+    }
+    if (curr->previous != NULL) {
+      copy->previous = new Node(curr->previous->data);
+    }
+    copy = copy->next;
+    curr = curr->next;
+  }
+  delete curr;
+  delete copy;
 }
 
 /* Modifies the current chain: 

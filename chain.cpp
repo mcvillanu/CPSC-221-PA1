@@ -51,50 +51,12 @@ Chain::Node * Chain::insertAfter(Node * p, const Block &ndata) {
   return newNode;
 }
 
-void Chain::swapHeadTail(Node *first, Node *second) {
-  Node * previous_second = second->previous;
-  second->previous = NULL;
-  second->next = head_->next;
-  head_->next->previous = second;
-  first->next = NULL;
-  first->previous = previous_second;
-  previous_second->next = first;
-  delete previous_second;
-  head_ = second;
-}
-
-void Chain::swapHead(Node *head, Node *q) {
-  Node *previous_q = q->previous;
-  Node *next_q = q->next;
-  q->previous = NULL;
-  q->next = head_->next;
-  head->previous = previous_q;
-  previous_q->next = head;
-  head->next = next_q;
-  next_q->previous = head;
-  head_ = q;
-  delete previous_q;
-  delete next_q;
-  return;
-}
-
-void Chain::swapTail(Node *tail, Node *q) {
-  Node *previous_q = q->previous;
-  Node *previous_tail = tail->previous;
-  Node *next_q = q->next;
-  q->next = NULL;
-  q->previous = previous_tail;
-  previous_tail->next = q;
-  tail->previous = previous_q;
-  previous_q->next = tail;
-  tail->next = next_q;
-  next_q->previous = tail;
-  delete previous_tail;
-  delete previous_next;
-  delete next_q;
-  return;
-}
-
+/**
+ * Helper function to swap two nodes that are side by side.
+ *
+ * @param first = The node that comes first in the chain.         
+ * @param second = The node that comes second in the chain.
+ */
 void Chain::swapSideBySide(Node *first, Node *second) {
   if (head_ == first) {
     Node * temp = second->next;
@@ -144,6 +106,11 @@ void Chain::swap(Node *p, Node *q) {
   if (p == NULL || q == NULL || p == q) {
     return;
   }
+  //if there is only 1 block in the chain, return immediately
+  if (length_ == 1) {
+    return;
+  }
+  //if there are only 2 blocks in the chain
   if (length_ == 2) {
     if (head_ == p) {
       head_ = q;
@@ -161,7 +128,7 @@ void Chain::swap(Node *p, Node *q) {
       return;
     }
   }
-
+  // if the two nodes are side by side
   if (p->next == q){
     swapSideBySide(p, q);
     return;
@@ -169,53 +136,46 @@ void Chain::swap(Node *p, Node *q) {
     swapSideBySide(q, p);
     return;
   }
-  //if you are swapping the head and tail
-  if (head_ == p && q->next == NULL) {
-    swapHeadTail(p, q);
-    return;
-  } else if (head_ == q && p->next == NULL) {
-    swapHeadTail(q, p);
-    return;
-  }
-
-//if one of the nodes is the head of the chain
-  if (head_ == p) {
-    swapHead(p, q);
-    return;
-  } else if (head_ == q) {
-    swapHead(q, p);
-    return;
-  }
-
-//if one of the nodes is the tail of the chain
-  if (p->next == NULL) {
-    swapTail(p, q);
-    return;
-  } else if (q->next == NULL) {
-    swapTail(q, p);
-    return;
-  }
+  //Otherwise:
   Node *previous_p = p->previous;
   Node *next_p = p->next;
-
   Node *previous_q = q->previous;
   Node *next_q = q->next;
 
-  previous_p->next = q;
-  previous_q->next = p;
-  p->previous = previous_q;
-  q->previous = previous_p;
-
-  next_p->previous = q;
-  next_q->previous = p;
-  p->next = next_q;
-  q->next = next_p;
-
+  if (previous_p == NULL) {
+    //This means p was the head
+    q->previous = NULL;
+    q->next = next_p;
+    next_p->previous = q; 
+    head_ = q;
+  } else {
+    q->previous = previous_p;
+    previous_p->next = q;
+    q->next = next_p;
+    //if p was not the original tail
+    if (next_p != NULL) {
+      next_p->previous = q;
+    }
+  }
+  if (previous_q == NULL) {
+    //This means q was the head
+    p->previous = NULL;
+    p->next = next_q;
+    next_q->previous = p;
+    head_ = p;
+  } else {
+    p->previous = previous_q;
+    previous_q->next = p;
+    p->next = next_q;
+    //if q was not the original tail
+    if (next_q != NULL) {
+      next_q->previous = p;
+    }
+  }
   delete previous_p;
-  delete previous_q;
   delete next_p;
+  delete previous_q;
   delete next_q;
-  return;
 }
 
 /**

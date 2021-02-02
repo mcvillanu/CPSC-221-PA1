@@ -96,6 +96,34 @@ class Chain {
   void swap(Node *p, Node *q); 
 
   /**
+   * Helper function to swap two nodes if they are side by side.
+   * @param first = the Node to swap that comes first in the chain.
+   * @param second = the Node to swap that comes second in the chain. 
+   */
+  void swapSideBySide(Node *first, Node *second);
+
+  /**
+   * Helper function to swap the head and tail nodes.
+   * @param first = the original head Node.
+   * @param second = the original tail Node. 
+   */
+  void swapHeadTail(Node *first, Node *second);
+
+  /**
+   * Helper function to swap the head and a node.
+   * @param head = the original head Node.
+   * @param q = node to swap with. 
+   */
+  void swapHead(Node *head, Node *q);
+
+  /**
+   * Helper function to swap the tail and a node.
+   * @param tail = the original tail Node.
+   * @param q = node to swap with. 
+   */
+  void swapTail(Node *tail, Node *q);
+
+  /**
    * Copies the parameter other Chain into the current Chain.
    * Does not free any memory. Called by copy constructor and op=.
    * @param other = The Chain to be copied.

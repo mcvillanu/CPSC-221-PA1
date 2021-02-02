@@ -11,6 +11,7 @@
  */
 Chain::~Chain() {
   /* your code here */
+  delete head_;
 }
 
 /**
@@ -26,6 +27,110 @@ Chain::~Chain() {
  */
 Chain::Node * Chain::insertAfter(Node * p, const Block &ndata) {
   /* your code here */
+  Node *newNode = new Node(ndata);
+  if (p == NULL) {
+    Node *temp = head_;
+    temp->previous = newNode;
+    newNode->next = temp;
+    head_= newNode;
+    delete temp;
+  } else {
+    if (p->next == NULL) {
+      p->next = newNode;
+      newNode->previous = p;
+    } else {
+      Node *next = p->next;
+      next->previous = newNode;
+      newNode->next = next;
+      newNode->previous = p;
+      p->next = newNode;
+      delete next;
+    }
+  }
+  length_++;
+  return newNode;
+}
+
+void Chain::swapHeadTail(Node *first, Node *second) {
+  Node * previous_second = second->previous;
+  second->previous = NULL;
+  second->next = head_->next;
+  head_->next->previous = second;
+  first->next = NULL;
+  first->previous = previous_second;
+  previous_second->next = first;
+  delete previous_second;
+  head_ = second;
+}
+
+void Chain::swapHead(Node *head, Node *q) {
+  Node *previous_q = q->previous;
+  Node *next_q = q->next;
+  q->previous = NULL;
+  q->next = head_->next;
+  head->previous = previous_q;
+  previous_q->next = head;
+  head->next = next_q;
+  next_q->previous = head;
+  head_ = q;
+  delete previous_q;
+  delete next_q;
+  return;
+}
+
+void Chain::swapTail(Node *tail, Node *q) {
+  Node *previous_q = q->previous;
+  Node *previous_tail = tail->previous;
+  Node *next_q = q->next;
+  q->next = NULL;
+  q->previous = previous_tail;
+  previous_tail->next = q;
+  tail->previous = previous_q;
+  previous_q->next = tail;
+  tail->next = next_q;
+  next_q->previous = tail;
+  delete previous_tail;
+  delete previous_next;
+  delete next_q;
+  return;
+}
+
+void Chain::swapSideBySide(Node *first, Node *second) {
+  if (head_ == first) {
+    Node * temp = second->next;
+    first->next = temp;
+    temp->previous = first;
+    first->previous = second;
+    second->next = first;
+    second->previous = NULL;
+    head_ = second;
+    delete temp;
+    return;
+  } else if (second->next == NULL) {
+    //if second is the tail
+    Node *temp = first->previous;
+    second->previous = temp;
+    temp->next = second;
+    second->next = first;
+    first->previous = second;
+    first->next = NULL;
+    delete temp;
+    return;
+  } else {
+    Node *previous_p = p->previous;
+    Node *next_q = q->next;
+
+    previous_p->next = q;
+    q->previous = previous_p;
+    q->next = p;
+    p->previous = q;
+    p->next = next_q;
+    next_q->previous = p;
+
+    delete previous_p;
+    delete next_q;
+    return;
+  }
 }
 
 /**
@@ -36,6 +141,81 @@ Chain::Node * Chain::insertAfter(Node * p, const Block &ndata) {
  */
 void Chain::swap(Node *p, Node *q) {
   /* your code here */
+  if (p == NULL || q == NULL || p == q) {
+    return;
+  }
+  if (length_ == 2) {
+    if (head_ == p) {
+      head_ = q;
+      q->previous = NULL;
+      q->next = p;
+      p->next = NULL;
+      p->previous = q;
+      return;
+    } else {
+      head_ = p;
+      p->previous = NULL;
+      p->next = q;
+      q->next = NULL;
+      q->previous = p;
+      return;
+    }
+  }
+
+  if (p->next == q){
+    swapSideBySide(p, q);
+    return;
+  } else if (q->next == p) {
+    swapSideBySide(q, p);
+    return;
+  }
+  //if you are swapping the head and tail
+  if (head_ == p && q->next == NULL) {
+    swapHeadTail(p, q);
+    return;
+  } else if (head_ == q && p->next == NULL) {
+    swapHeadTail(q, p);
+    return;
+  }
+
+//if one of the nodes is the head of the chain
+  if (head_ == p) {
+    swapHead(p, q);
+    return;
+  } else if (head_ == q) {
+    swapHead(q, p);
+    return;
+  }
+
+//if one of the nodes is the tail of the chain
+  if (p->next == NULL) {
+    swapTail(p, q);
+    return;
+  } else if (q->next == NULL) {
+    swapTail(q, p);
+    return;
+  }
+  Node *previous_p = p->previous;
+  Node *next_p = p->next;
+
+  Node *previous_q = q->previous;
+  Node *next_q = q->next;
+
+  previous_p->next = q;
+  previous_q->next = p;
+  p->previous = previous_q;
+  q->previous = previous_p;
+
+  next_p->previous = q;
+  next_q->previous = p;
+  p->next = next_q;
+  q->next = next_p;
+
+  delete previous_p;
+  delete previous_q;
+  delete next_p;
+  delete next_q;
+  return;
 }
 
 /**

@@ -248,7 +248,7 @@ void Chain::unscramble() {
           bMin = min(bMin, (other->data).distanceTo(B->data));
         }
       }
-
+      
       if(bMin > max){
         max = bMin;
         leftMost = B;
@@ -257,6 +257,6 @@ void Chain::unscramble() {
 
     this->swap(index, leftMost);
     index = leftMost->next;
-    max = -90000000.0;
+    max = -std::numeric_limits<double>::max();
   }
 }

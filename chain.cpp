@@ -210,10 +210,16 @@ void Chain::copy(Chain const &other) {
   /* your code here */
   this->length_ = other.length_;
   Node * curr = other.head_;
-  this->head_ = NULL;
-  Node * copy = head_;
+  Node * copy = new Node(curr->data);
+  this->head_ = copy;
   while (curr != NULL) {
-    copy = insertAfter(copy, curr->data);
+    if (curr->next != NULL) {
+      copy->next = new Node(curr->next->data);
+    }
+    if (curr->prev != NULL) {
+      copy->prev = new Node(curr->prev->data);
+    }
+    copy = copy->next;
     curr = curr->next;
   }
 }
@@ -249,7 +255,7 @@ void Chain::unscramble() {
           bMin = min(bMin, (other->data).distanceTo(B->data));
         }
       }
-      
+
       if(bMin > max){
         max = bMin;
         leftMost = B;

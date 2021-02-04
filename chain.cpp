@@ -27,17 +27,27 @@ Chain::~Chain() {
  */
 Chain::Node * Chain::insertAfter(Node * p, const Block &ndata) {
   /* your code here */
-  Node *newNode = new Node(ndata);
+  Node * newNode = new Node(ndata);
   if (p == NULL) {
-    head_->prev = newNode;
-    newNode->next = head_;
-    head_ = newNode;
+    if (this->head_ == NULL) {
+      this->head_ = newNode;
+      newNode->next = NULL;
+      newNode->prev = NULL;
+    } 
+    else {
+      this->head_->prev = newNode;
+      newNode->next = this->head_;
+      this->head_ = newNode;
+      newNode->prev = NULL;
+    }
   } else {
     if (p->next == NULL) {
       //if p is the tail
       p->next = newNode;
       newNode->prev = p;
+      newNode->next = NULL;
     } else {
+      
       Node *next = p->next;
       next->prev = newNode;
       newNode->next = next;
@@ -45,9 +55,11 @@ Chain::Node * Chain::insertAfter(Node * p, const Block &ndata) {
       p->next = newNode;
     }
   }
+
   length_++;
   return newNode;
 }
+
 
 /**
  * Helper function to swap two nodes that are side by side.
@@ -174,6 +186,8 @@ void Chain::swap(Node *p, Node *q) {
  */
 void Chain::clear() {
   /* your code here */
+
+  
   delete head_;
   head_ = NULL;
 }
@@ -221,4 +235,12 @@ void Chain::copy(Chain const &other) {
  */
 void Chain::unscramble() {
   /* your code here */
+  // double max = 0;
+  // for (Node * B = head_; B != NULL; B = B->next){
+  //   for (Node * other = head_; other != NULL; other = other->next){
+  //     if(B != other){
+  //       double distance = 
+  //     }
+  //   }
+  // }
 }

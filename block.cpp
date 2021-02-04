@@ -4,7 +4,13 @@
 
 int Block::height() const {
   /* your code here */
-  return this->data[0].size();
+  if (this->data.empty()) {
+    return 0;
+  }
+  
+  vector<HSLAPixel> arr = this->data[0];
+  int size = arr.size();
+  return size;
 }
 
 int Block::width() const {
@@ -19,17 +25,25 @@ int Block::width() const {
    */
 void Block::render(PNG &im, int x) const {
   /* your code here */
-  unsigned int height = im.height();
-  unsigned int width = im.width();
+  int h = this->height();
+  int w = this->width();
+  
+  for (int i = 0; i < w; i++){
+    for (int j = 0; j < h; j++){
+      HSLAPixel * pixel = im.getPixel(x+i, j);
+      // cout << this->data[i][j].h << endl;
+      // cout << this->data[i][j].s << endl;
+      // cout << this->data[i][j].l << endl;
+      // cout << this->data[i][j].a << endl;
 
-  for (int i = 0; i < this->width(); i++){
-    for (int j = 0; j < this->height(); j++){
-      *im.getPixel(x+i, j) = this->data[i][j];
+
+      pixel->h = this->data[i][j].h;
+      pixel->s = this->data[i][j].s;
+      pixel->l = this->data[i][j].l;
+      pixel->a = this->data[i][j].a;
     }
   }
-
 }
-
 
 /** 
    * Creates a block that is width X img.height pixels in size
@@ -38,11 +52,14 @@ void Block::render(PNG &im, int x) const {
    */
 void Block::build(PNG &im, int x, int width) {
   /* your code here */
-  unsigned int height = im.height();
+  int height = im.height();
 
-  for (int i = x; x < width; x++) {
+  for (int i = 0; i < width; i++) {
+    vector<HSLAPixel> vec(height);
+    this->data.push_back(vec);
+
     for (int y = 0; y < height; y++) {
-      this->data[i].push_back(*im.getPixel(i, y)); 
+      this->data[i][y]=(*im.getPixel(x+i, y)); 
     }
   }
 }

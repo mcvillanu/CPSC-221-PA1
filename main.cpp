@@ -30,9 +30,9 @@ int main() {
   //im.readFromFile("images/kh.png");
   //im.readFromFile("images/terrain.png");
   //im.readFromFile("images/ronMueck.png");
-  im.readFromFile("images/kh.png");
+  im.readFromFile("images/terrain.png");
 
-  Chain c(im, 5);
+  Chain c(im, 20);
   Chain b = c;
   b.render().writeToFile("images/testcopy.png");
   // randomly scramble the blocks.
@@ -40,17 +40,31 @@ int main() {
   // c.scramble();
 
   // or test swapping a few blocks
-  //  c.testSwap(3,4); // swap the 3rd and 4th blocks.
-  //  c.testSwap(0,1);
-  //  c.testSwap(1,0);
-  //  c.testSwap(0,4);
+   c.testSwap(3,4); // swap the 3rd and 4th blocks.
+  c.testSwap(0,4);
+   c.testSwap(1,0);
+   c.testSwap(0,4);
+   c.testSwap(0,4);
+   c.testSwap(6,4);
+   c.testSwap(8,5);
+   c.testSwap(18,7);
+   c.testSwap(12,7);
+   c.testSwap(13,4);
+   c.testSwap(6,4);
+   c.testSwap(18,5);
+   c.testSwap(8,17);
+   c.testSwap(2,7);
+   c.testSwap(13,4);
+   c.testSwap(6,5);
+   c.testSwap(8,14);
+   c.testSwap(10,3);
 
   c.render().writeToFile("images/scram.png");  // look at scram.png to debug
   
   // test unscramble()
 
-  // c.unscramble();
-  // c.render().writeToFile("images/unscram.png");// look at unscram.png also
+  c.unscramble();
+  c.render().writeToFile("images/unscram.png");// look at unscram.png also
 
   /* Check that unscramble works to unscramble a *saved* image too.
   PNG om;

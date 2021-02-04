@@ -1,7 +1,7 @@
 #include "chain.h"
 #include <cmath>
 #include <iostream>
-
+#include <limits>
 
 // PA1 functions
 
@@ -235,12 +235,28 @@ void Chain::copy(Chain const &other) {
  */
 void Chain::unscramble() {
   /* your code here */
-  // double max = 0;
-  // for (Node * B = head_; B != NULL; B = B->next){
-  //   for (Node * other = head_; other != NULL; other = other->next){
-  //     if(B != other){
-  //       double distance = 
-  //     }
-  //   }
-  // }
+  double max = -std::numeric_limits<double>::max();
+  Node * leftMost = head_;
+  Node * index = head_;
+  
+  while (index != NULL){
+    for (Node * B = index; B != NULL; B = B->next){
+      double bMin = std::numeric_limits<double>::max();
+
+      for (Node * other = index; other != NULL; other = other->next){
+        if(B != other){
+          bMin = min(bMin, (other->data).distanceTo(B->data));
+        }
+      }
+
+      if(bMin > max){
+        max = bMin;
+        leftMost = B;
+      }
+    }
+
+    this->swap(index, leftMost);
+    index = leftMost->next;
+    max = -90000000.0;
+  }
 }

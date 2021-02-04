@@ -208,7 +208,7 @@ void Chain::clear() {
  */
 void Chain::copy(Chain const &other) {
   /* your code here */
-  // this->length_ = other.length_;
+  this->length_ = 0;
   Node * curr = other.head_;
   this->head_ = NULL;
   Node * copy = this->head_;

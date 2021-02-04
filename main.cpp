@@ -31,7 +31,7 @@ int main() {
   //im.readFromFile("images/terrain.png");
   //im.readFromFile("images/ronMueck.png");
   //im.readFromFile("images/terrain.png");
-  im.readFromFile("images/sun.png");
+  im.readFromFile("images/kh.png");
 
   Chain c(im, 5);
   Chain b = c;

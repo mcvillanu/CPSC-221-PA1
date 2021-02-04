@@ -208,18 +208,13 @@ void Chain::clear() {
  */
 void Chain::copy(Chain const &other) {
   /* your code here */
-  this->length_ = other.length_;
+  // this->length_ = other.length_;
   Node * curr = other.head_;
-  Node * copy = new Node(curr->data);
-  this->head_ = copy;
+  this->head_ = NULL;
+  Node * copy = this->head_;
+
   while (curr != NULL) {
-    if (curr->next != NULL) {
-      copy->next = new Node(curr->next->data);
-    }
-    if (curr->prev != NULL) {
-      copy->prev = new Node(curr->prev->data);
-    }
-    copy = copy->next;
+    copy = insertAfter(copy, curr->data);
     curr = curr->next;
   }
 }
